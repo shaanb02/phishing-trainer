@@ -4,29 +4,43 @@ A self-hosted phishing **simulation and security-awareness training** platform b
 
 This is a defensive security-training tool, in the same category as open-source projects like [GoPhish](https://github.com/gophish/gophish). It is intended only for authorized awareness training. See [Responsible use](#responsible-use) below.
 
+![Phishing Trainer walkthrough](docs/demo.gif)
+
 ## Features
 
-- **Campaign management** — create and send simulated phishing emails to a list of users
-- **Click tracking** — records who opened a link, when, and from what browser/device (via user-agent parsing)
-- **Education on failure** — users who click are shown a landing page that explains the red flags they missed
-- **Results dashboard** — per-campaign and per-user reporting
-- **Multiple email backends** — Gmail/SMTP, [SendGrid](https://sendgrid.com), or [Resend](https://resend.com)
-- **Optional AI personalization** — generate email variations with OpenAI (GPT-4o) when an API key is provided
-- **Admin authentication** — Flask-Login with hashed passwords
+- **Campaign management:** create and send simulated phishing emails to a list of users
+- **Click tracking:** records who opened a link, when, and from what browser and device (via user-agent parsing)
+- **Education on failure:** users who click are shown a landing page that explains the red flags they missed
+- **Results dashboard:** per-campaign and per-user reporting, with a risk rating per campaign
+- **Multiple email backends:** Gmail/SMTP, [SendGrid](https://sendgrid.com), or [Resend](https://resend.com)
+- **Optional AI personalization:** generate email variations with OpenAI (GPT-4o) when an API key is provided
+- **Admin authentication:** Flask-Login with hashed passwords
+
+## Screenshots
+
+| Training dashboard | Phishing campaigns |
+|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Campaigns](docs/screenshots/campaigns.png) |
+
+| Results and analytics | Education center |
+|---|---|
+| ![Results](docs/screenshots/results.png) | ![Education](docs/screenshots/education.png) |
+
+> The data shown above is sample data generated for demonstration. All names and email addresses are fictional.
 
 ## Tech stack
 
 - **Backend:** Python 3.11+, Flask, Flask-SQLAlchemy, Flask-Login
 - **Database:** SQLite by default (set `DATABASE_URL` to use PostgreSQL/MySQL)
 - **Email:** SMTP / SendGrid / Resend
-- **Frontend:** server-rendered Jinja2 templates, vanilla JS
+- **Frontend:** server-rendered Jinja2 templates, vanilla JS, Bootstrap 5
 
 ## Getting started
 
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/<your-username>/phishing-trainer.git
+git clone https://github.com/shaanb02/phishing-trainer.git
 cd phishing-trainer
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
@@ -51,7 +65,7 @@ python main.py
 
 The app starts at `http://localhost:5000`. The database tables are created automatically on first run. Open the app and create your first admin account via the setup page.
 
-> **Note:** `main.py` runs Flask's development server with `debug=True`. For any real deployment, run behind a production WSGI server (e.g. `gunicorn`) with `debug=False`.
+> **Note:** `main.py` runs Flask's development server with `debug=True`. For any real deployment, run behind a production WSGI server (for example `gunicorn`) with `debug=False`.
 
 ## Configuration reference
 
@@ -73,6 +87,10 @@ This software sends deceptive emails and collects interaction data. Use it **onl
 - Follow applicable privacy laws when storing data about who clicked.
 
 The author assumes no liability for misuse.
+
+## Background
+
+This platform is the implementation behind a research study on low-cost phishing-simulation tooling for cybersecurity awareness in educational settings, published in the National High School Journal of Science (NHSJS): [read the paper](https://nhsjs.com/2026/development-and-evaluation-of-a-low-cost-web-based-phishing-simulation-platform-for-cybersecurity-awareness-in-educational-settings/).
 
 ## License
 
