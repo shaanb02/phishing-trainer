@@ -1,0 +1,489 @@
+{% extends "base.html" %}
+
+{% block title %}Campaign Management - Cybersecurity Training{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i data-feather="mail" class="me-2"></i>Phishing Campaigns</h1>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCampaignModal">
+                <i data-feather="plus" class="me-1"></i>Create Campaign
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Campaigns List -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Training Campaigns</h5>
+    </div>
+    <div class="card-body">
+        {% if campaigns %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Campaign</th>
+                            <th>Status</th>
+                            <th>Template</th>
+                            <th>Statistics</th>
+                            <th>Dates</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for campaign in campaigns %}
+                        <tr>
+                            <td>
+                                <div>
+                                    <strong>{{ campaign.name }}</strong>
+                                    {% if campaign.use_ai_generation %}
+                                        <span class="badge bg-info ms-2">AI Enhanced</span>
+                                    {% endif %}
+                                </div>
+                                {% if campaign.description %}
+                                    <small class="text-muted">{{ campaign.description }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if campaign.status == 'active' else 'warning text-dark' if campaign.status == 'paused' else 'primary' if campaign.status == 'completed' else 'secondary' }}">
+                                    {{ campaign.status.title() }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if campaign.template %}
+                                    <span class="text-info">{{ campaign.template.name }}</span>
+                                    <br><small class="text-muted">{{ campaign.template.category }}</small>
+                                {% else %}
+                                    <span class="text-muted">Custom/AI Generated</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="small">
+                                    <div><strong>{{ campaign.total_sent }}</strong> sent</div>
+                                    <div><strong>{{ campaign.total_clicked }}</strong> clicked</div>
+                                    <div class="text-{{ 'danger' if campaign.click_rate > 20 else 'warning' if campaign.click_rate > 10 else 'success' }}">
+                                        <strong>{{ campaign.click_rate }}%</strong> rate
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="small">
+                                    <div>Created: {{ campaign.created_at.strftime('%m/%d/%Y') }}</div>
+                                    {% if campaign.started_at %}
+                                        <div>Started: {{ campaign.started_at.strftime('%m/%d/%Y') }}</div>
+                                    {% endif %}
+                                    {% if campaign.completed_at %}
+                                        <div>Completed: {{ campaign.completed_at.strftime('%m/%d/%Y') }}</div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    {% if campaign.status == 'draft' %}
+                                        <form method="POST" action="{{ url_for('launch_campaign', campaign_id=campaign.id) }}" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-success" 
+                                                    onclick="return confirm('Launch this campaign and send emails to all users?')">
+                                                <i data-feather="send" style="width: 14px; height: 14px;"></i>
+                                                Launch
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                    
+                                    <button class="btn btn-sm btn-outline-info" 
+                                            onclick="viewCampaignDetails({{ campaign.id }})">
+                                        <i data-feather="eye" style="width: 14px; height: 14px;"></i>
+                                        View
+                                    </button>
+
+                                    <a href="{{ url_for('export_campaign', campaign_id=campaign.id) }}"
+                                       class="btn btn-sm btn-outline-success">
+                                        <i data-feather="download" style="width: 14px; height: 14px;"></i>
+                                        Export
+                                    </a>
+                                    
+                                    {% if campaign.status == 'active' %}
+                                        <form method="POST" action="{{ url_for('pause_campaign', campaign_id=campaign.id) }}" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-warning"
+                                                    onclick="return confirm('Pause this campaign? Recipients will no longer be able to click the tracking links.')">
+                                                <i data-feather="pause" style="width: 14px; height: 14px;"></i>
+                                                Pause
+                                            </button>
+                                        </form>
+                                    {% elif campaign.status == 'paused' %}
+                                        <form method="POST" action="{{ url_for('resume_campaign', campaign_id=campaign.id) }}" class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                                <i data-feather="play" style="width: 14px; height: 14px;"></i>
+                                                Resume
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    <button class="btn btn-sm btn-outline-danger"
+                                            data-campaign-id="{{ campaign.id }}"
+                                            data-campaign-name="{{ campaign.name }}"
+                                            onclick="confirmDelete(this.dataset.campaignId, this.dataset.campaignName)">
+                                        <i data-feather="trash-2" style="width: 14px; height: 14px;"></i>
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i data-feather="mail" class="text-muted mb-3" style="width: 64px; height: 64px;"></i>
+                <h4 class="text-muted">No Campaigns Created</h4>
+                <p class="text-muted">Create your first phishing training campaign to start educating users.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCampaignModal">
+                    <i data-feather="plus" class="me-1"></i>Create Your First Campaign
+                </button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Create Campaign Modal -->
+<div class="modal fade" id="createCampaignModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="plus" class="me-2"></i>Create New Campaign
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" action="{{ url_for('create_campaign') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Campaign Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" name="name" required
+                               placeholder="e.g., Q1 Security Awareness Training">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"
+                                  placeholder="Brief description of this campaign's objectives"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Campaign Sequence Settings</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input" type="checkbox" id="is_sequence" name="is_sequence" onchange="toggleSequenceOptions()">
+                                    <label class="form-check-label" for="is_sequence">Multi-email Sequence</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 sequence-option" style="display:none;">
+                                <label for="max_emails" class="form-label">Total Emails</label>
+                                <input type="number" class="form-control" id="max_emails" name="max_emails" value="3" min="1" max="5">
+                            </div>
+                            <div class="col-md-4 sequence-option" style="display:none;">
+                                <label for="interval_days" class="form-label">Interval (Days)</label>
+                                <input type="number" class="form-control" id="interval_days" name="interval_days" value="3" min="1" max="14">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email Generation Method</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="generation_method" 
+                                   id="use_template" value="template" checked onchange="toggleGenerationOptions()">
+                            <label class="form-check-label" for="use_template">
+                                Use Email Template
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="generation_method" 
+                                   id="use_ai" value="ai" onchange="toggleGenerationOptions()">
+                            <label class="form-check-label" for="use_ai">
+                                AI-Generated Personalized Emails
+                                <span class="badge bg-info ms-1">Advanced</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="template_selection" class="mb-3">
+                        <label for="template_id" class="form-label">Select Template</label>
+                        <select class="form-select" id="template_id" name="template_id">
+                            <option value="">Choose a template...</option>
+                            {% for template in templates %}
+                            <option value="{{ template.id }}">
+                                {{ template.name }} ({{ template.category }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div id="ai_options" class="mb-3" style="display: none;">
+                        <div class="mb-3">
+                            <label for="ai_base_template" class="form-label">Base Template (Optional)</label>
+                            <select class="form-select" id="ai_base_template" name="template_id">
+                                <option value="">Generate from scratch</option>
+                                {% for template in templates %}
+                                <option value="{{ template.id }}">
+                                    Enhance: {{ template.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">Choose a template to enhance with AI personalization</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="ai_context" class="form-label">AI Context & Instructions</label>
+                            <textarea class="form-control" id="ai_context" name="ai_context" rows="3"
+                                      placeholder="Additional context for AI generation (e.g., 'Focus on IT security scenarios', 'Use urgent tone', 'Target managers specifically')"></textarea>
+                            <div class="form-text">Provide specific instructions to guide AI email generation</div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i data-feather="info" class="me-2"></i>
+                            <strong>AI Enhancement:</strong> Emails will be personalized based on each user's name and role for more realistic training scenarios.
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i data-feather="alert-triangle" class="me-2"></i>
+                        <strong>Educational Purpose:</strong> This campaign will send training emails to help users identify phishing attempts. All recipients will be educated about the simulation.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i data-feather="plus" class="me-1"></i>Create Campaign
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteCampaignModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-danger">
+                <h5 class="modal-title text-danger">
+                    <i data-feather="trash-2" class="me-2"></i>Delete Campaign
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteCampaignName"></strong>?</p>
+                <div class="alert alert-danger mb-0">
+                    <i data-feather="alert-triangle" class="me-2"></i>
+                    This will permanently remove the campaign and all its email records and click tracking data. This cannot be undone.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteCampaignForm" method="POST">
+                    <button type="submit" class="btn btn-danger" onclick="handleDeleteSubmit(this)">
+                        <i data-feather="trash-2" class="me-1"></i>Yes, Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Details Modal -->
+<div class="modal fade" id="campaignDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="eye" class="me-2"></i>Campaign Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="campaignDetailsContent">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Toggle between template and AI generation options
+function toggleSequenceOptions() {
+    const isSequence = document.getElementById('is_sequence').checked;
+    const options = document.querySelectorAll('.sequence-option');
+    options.forEach(opt => {
+        opt.style.display = isSequence ? 'block' : 'none';
+    });
+}
+
+// Toggle between template and AI generation options
+function toggleGenerationOptions() {
+    const useTemplate = document.getElementById('use_template').checked;
+    const templateSection = document.getElementById('template_selection');
+    const aiSection = document.getElementById('ai_options');
+    
+    if (useTemplate) {
+        templateSection.style.display = 'block';
+        aiSection.style.display = 'none';
+        // Clear AI form field
+        document.getElementById('ai_context').value = '';
+    } else {
+        templateSection.style.display = 'none';
+        aiSection.style.display = 'block';
+        // Clear template selection
+        document.getElementById('template_id').value = '';
+    }
+}
+
+// View campaign details
+function viewCampaignDetails(campaignId) {
+    const detailsContent = document.getElementById('campaignDetailsContent');
+    detailsContent.innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+            <p class="mt-2">Loading campaign details...</p>
+        </div>`;
+    new bootstrap.Modal(document.getElementById('campaignDetailsModal')).show();
+
+    fetch(`/campaigns/${campaignId}/details`)
+        .then(r => r.json())
+        .then(d => {
+            const clickedCount = d.users.filter(u => u.clicked).length;
+            const safeCount = d.users.length - clickedCount;
+
+            let rows = '';
+            if (d.users.length === 0) {
+                rows = `<tr><td colspan="6" class="text-center text-muted">No emails sent yet</td></tr>`;
+            } else {
+                d.users.forEach(u => {
+                    const badge = u.clicked
+                        ? `<span class="badge bg-danger">Clicked</span>`
+                        : `<span class="badge bg-success">Safe</span>`;
+                    const delivery = u.delivery_status === 'sent'
+                        ? `<span class="badge bg-success">Sent</span>`
+                        : u.delivery_status === 'failed'
+                            ? `<span class="badge bg-danger">Failed</span>`
+                            : `<span class="badge bg-secondary">${u.delivery_status}</span>`;
+                    const clickDetail = u.clicked
+                        ? `${u.clicked_at}<br><small class="text-muted">${u.browser || ''} · ${u.device || ''}</small>`
+                        : '—';
+                    rows += `
+                        <tr>
+                            <td>
+                                <div class="fw-semibold">${u.name}</div>
+                                <small class="text-muted">${u.email}</small>
+                            </td>
+                            <td><small>${u.department}</small></td>
+                            <td><small>${u.role}</small></td>
+                            <td>${delivery}<br><small class="text-muted">${u.sent_at}</small></td>
+                            <td>${badge}</td>
+                            <td><small>${clickDetail}</small></td>
+                        </tr>`;
+                });
+            }
+
+            detailsContent.innerHTML = `
+                <div class="row mb-3 text-center">
+                    <div class="col-4">
+                        <div class="card bg-secondary">
+                            <div class="card-body py-2">
+                                <div class="fs-4 fw-bold">${d.total_sent}</div>
+                                <small class="text-muted">Emails Sent</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card bg-danger bg-opacity-25">
+                            <div class="card-body py-2">
+                                <div class="fs-4 fw-bold text-danger">${clickedCount}</div>
+                                <small class="text-muted">Clicked</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card bg-success bg-opacity-25">
+                            <div class="card-body py-2">
+                                <div class="fs-4 fw-bold text-success">${safeCount}</div>
+                                <small class="text-muted">Did Not Click</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="text" class="form-control form-control-sm" id="userSearch"
+                           placeholder="Search by name, email, or department…"
+                           oninput="filterUserTable(this.value)">
+                </div>
+
+                <div class="table-responsive" style="max-height:420px; overflow-y:auto;">
+                    <table class="table table-sm table-hover align-middle" id="userTable">
+                        <thead class="sticky-top table-dark">
+                            <tr>
+                                <th>User</th>
+                                <th>Department</th>
+                                <th>Role</th>
+                                <th>Delivered</th>
+                                <th>Result</th>
+                                <th>Click Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">${rows}</tbody>
+                    </table>
+                </div>`;
+            feather.replace();
+        })
+        .catch(() => {
+            detailsContent.innerHTML = `<div class="alert alert-danger">Failed to load campaign details.</div>`;
+        });
+}
+
+function filterUserTable(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('#userTableBody tr').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+}
+
+function handleDeleteSubmit(btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Deleting…';
+    btn.closest('form').submit();
+}
+
+// Delete campaign
+function confirmDelete(campaignId, campaignName) {
+    document.getElementById('deleteCampaignName').textContent = campaignName;
+    document.getElementById('deleteCampaignForm').action = '/campaigns/' + campaignId + '/delete';
+    new bootstrap.Modal(document.getElementById('deleteCampaignModal')).show();
+}
+
+// Clear form when modal is closed
+document.getElementById('createCampaignModal').addEventListener('hidden.bs.modal', function() {
+    this.querySelector('form').reset();
+    toggleGenerationOptions(); // Reset to template mode
+});
+
+// Set hidden field for AI generation
+document.getElementById('createCampaignModal').querySelector('form').addEventListener('submit', function() {
+    const useAI = document.getElementById('use_ai').checked;
+    
+    // Create hidden input for use_ai flag
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'use_ai';
+    hiddenInput.value = useAI ? '1' : '';
+    this.appendChild(hiddenInput);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Critical Security Update Required</title>
+    <style>
+        /* Urgent security email template - more sophisticated phishing simulation */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f8fa;
+            color: #24292f;
+        }
+        .email-wrapper {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .company-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .tagline {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 35px;
+        }
+        .critical-banner {
+            background: linear-gradient(45deg, #ff4757, #ff6b7a);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .vulnerability-info {
+            background-color: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .vuln-title {
+            color: #c53030;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .severity-high {
+            background-color: #fed7d7;
+            color: #9b2c2c;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+        .countdown {
+            background-color: #2d3748;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .time-remaining {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        .info-section {
+            background-color: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .footer {
+            background-color: #2d3748;
+            color: #cbd5e0;
+            padding: 25px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .footer-logo {
+            color: #90cdf4;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .disclaimer {
+            font-size: 11px;
+            color: #a0aec0;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+        .fake-cert {
+            background-color: #edf2f7;
+            border: 1px dashed #cbd5e0;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- This is a cybersecurity training email. If you received this, 
+         you are part of a phishing awareness training program. -->
+    
+    <div class="email-wrapper">
+        <!-- Header -->
+        <div class="header">
+            <div class="company-logo">🔒 CyberShield Systems</div>
+            <div class="tagline">Enterprise Security Solutions</div>
+        </div>
+        
+        <!-- Critical Alert Banner -->
+        <div class="content">
+            <div class="critical-banner">
+                🚨 CRITICAL SECURITY VULNERABILITY DETECTED 🚨
+            </div>
+            
+            <h2 style="color: #2d3748; margin-bottom: 15px;">Immediate Action Required - {{USER_NAME}}</h2>
+            
+            <p>Our security monitoring systems have identified a <strong>critical zero-day vulnerability</strong> (CVE-2024-URGENT) affecting your organization's infrastructure.</p>
+            
+            <!-- Vulnerability Details -->
+            <div class="vulnerability-info">
+                <div class="vuln-title">
+                    <span class="severity-high">HIGH SEVERITY</span> 
+                    Remote Code Execution Vulnerability
+                </div>
+                <p><strong>Affected Systems:</strong> All employee workstations and servers</p>
+                <p><strong>Risk Level:</strong> Critical - Immediate exploitation possible</p>
+                <p><strong>First Detected:</strong> Today at 06:47 AM</p>
+                <p><strong>Potential Impact:</strong> Complete system compromise, data theft, ransomware deployment</p>
+            </div>
+            
+            <!-- Countdown Timer -->
+            <div class="countdown">
+                <div>Time Remaining to Apply Emergency Patch:</div>
+                <div class="time-remaining">04:37:22</div>
+                <div style="font-size: 12px; margin-top: 5px;">
+                    After this time, your systems may be automatically quarantined
+                </div>
+            </div>
+            
+            <p>As a member of the IT team, you must <strong>immediately install the emergency security patch</strong> to prevent potential compromise of our entire network.</p>
+            
+            <!-- Fake Technical Details -->
+            <div class="info-section">
+                <h4 style="margin-top: 0; color: #2d3748;">Technical Details</h4>
+                <div class="fake-cert">
+CVE-2024-URGENT: Buffer overflow in network authentication module
+CVSS Score: 9.8 (Critical)
+Vendor: Multiple (affects Windows, macOS, Linux)
+Exploit Complexity: Low
+Attack Vector: Network
+Authentication Required: None
+                </div>
+                <p><strong>Impact:</strong> Attackers can execute arbitrary code with system privileges by sending specially crafted network packets to vulnerable systems.</p>
+            </div>
+            
+            <p style="color: #e53e3e; font-weight: 600;">⚠️ WARNING: Delaying this update puts our entire organization at risk of cyber attack.</p>
+            
+            <!-- Call to Action -->
+            <div style="text-align: center; margin: 35px 0;">
+                <a href="{{TRACKING_URL}}" class="action-button">
+                    🛡️ INSTALL EMERGENCY PATCH NOW
+                </a>
+            </div>
+            
+            <div style="background-color: #fffbf0; border: 1px solid #f6d55c; padding: 15px; border-radius: 6px; margin: 20px 0;">
+                <p style="margin: 0; font-size: 14px; color: #744210;">
+                    <strong>🔐 Secure Installation Process:</strong><br>
+                    The patch will be downloaded from our secure update servers. You will be prompted to enter your system credentials to authorize the installation. This process typically takes 5-10 minutes.
+                </p>
+            </div>
+            
+            <p style="font-size: 13px; color: #666;">If you have any questions about this critical update, contact the Security Operations Center immediately at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d4879b9794b7adb6b1a6a7bcbdb1b8b0f9a7ada7a0b1b9a7fab7bbb9">[email&#160;protected]</a> or call our emergency hotline at 1-800-URGENT-SEC.</p>
+            
+            <p style="font-size: 13px; color: #666;">This notification was sent to all IT personnel and system administrators. Please confirm patch installation within 4 hours.</p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">CyberShield Systems</div>
+            <p>Security Operations Center<br>
+            24/7 Threat Monitoring & Response</p>
+            
+            <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b3824282b0812090e191803020e070f461812181f0e061845080406">[email&#160;protected]</a> | 📞 1-800-CYBER-SEC<br>
+            🌐 www.cybershield-systems.com | 📍 Secure Operations Center, Tech City</p>
+            
+            <div class="disclaimer">
+                This is an automated security alert from CyberShield Systems monitoring infrastructure.
+                This message contains time-sensitive security information. Immediate action is required.
+                Do not ignore this notification as it may result in security policy violations.
+                
+                © 2024 CyberShield Systems. All rights reserved. 
+                Enterprise Security License #SEC-2024-ENTERPRISE-7749
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden educational disclaimer -->
+    <div style="display: none;">
+        PHISHING TRAINING EMAIL: This is a sophisticated phishing simulation for cybersecurity awareness.
+        Red flags include: extrem

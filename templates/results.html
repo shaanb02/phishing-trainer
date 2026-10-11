@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}Campaign Results - Cybersecurity Training{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i data-feather="bar-chart-2" class="me-2"></i>Training Results & Analytics</h1>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('export_results') }}" class="btn btn-success">
+                    <i data-feather="download" class="me-1"></i>Export to CSV
+                </a>
+                <button class="btn btn-outline-secondary" onclick="refreshData()">
+                    <i data-feather="refresh-cw" class="me-1"></i>Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Performance Overview -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i data-feather="trending-up" class="me-2"></i>Campaign Performance</h5>
+            </div>
+            <div class="card-body">
+                {% if campaigns %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Campaign Name</th>
+                                    <th>Status</th>
+                                    <th>Emails Sent</th>
+                                    <th>Links Clicked</th>
+                                    <th>Click Rate</th>
+                                    <th>Education Views</th>
+                                    <th>Learning Impact</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for campaign in campaigns %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ campaign.name }}</strong>
+                                        {% if campaign.use_ai_generation %}
+                                            <span class="badge bg-info ms-1">AI</span>
+                                        {% endif %}
+                                        {% if campaign.description %}
+                                            <br><small class="text-muted">{{ campaign.description[:50] }}{% if campaign.description|length > 50 %}...{% endif %}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if campaign.status == 'active' else 'primary' if campaign.status == 'completed' else 'secondary' }}">
+                                            {{ campaign.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ campaign.total_sent }}</td>
+                                    <td>{{ campaign.total_clicked }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="me-2 text-{{ 'danger' if campaign.click_rate > 20 else 'warning' if campaign.click_rate > 10 else 'success' }}">
+                                                {{ campaign.click_rate }}%
+                                            </span>
+                                            <div class="progress flex-grow-1" style="height: 6px;">
+                                                <div class="progress-bar bg-{{ 'danger' if campaign.click_rate > 20 else 'warning' if campaign.click_rate > 10 else 'success' }}" 
+                                                     style="width: {{ campaign.click_rate }}%"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% set education_views = campaign.emails_sent|selectattr('clicks')|list|selectattr('clicks.0.viewed_education')|list|length %}
+                                        {{ education_views }} / {{ campaign.total_clicked }}
+                                    </td>
+                                    <td>
+                                        {% if campaign.click_rate > 20 %}
+                                            <span class="badge bg-danger">High Risk</span>
+                                        {% elif campaign.click_rate > 10 %}
+                                            <span class="badge bg-warning">Moderate Risk</span>
+                                        {% else %}
+                                            <span class="badge bg-success">Low Risk</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary" 
+                                                onclick="viewDetailedResults({{ campaign.id }})">
+                                            <i data-feather="eye" style="width: 14px; height: 14px;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i data-feather="bar-chart-2" class="text-muted mb-3" style="width: 48px; height: 48px;"></i>
+                        <h5 class="text-muted">No Campaign Results Available</h5>
+                        <p class="text-muted">Launch campaigns to see training effectiveness data.</p>
+                        <a href="{{ url_for('campaigns') }}" class="btn btn-primary">
+                            <i data-feather="mail" class="me-1"></i>View Campaigns
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Click Activity -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i data-feather="activity" class="me-2"></i>Recent Click Activity</h5>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary active" onclick="filterClicks('all')">All</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="filterClicks('today')">Today</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="filterClicks('week')">This Week</button>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if click_data %}
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="clickActivityTable">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>User</th>
+                                    <th>Department</th>
+                                    <th>Role</th>
+                                    <th>Campaign</th>
+                                    <th>Metric: Time to Click</th>
+                                    <th>Metric: Device/OS</th>
+                                    <th>Education Status</th>
+                                    <th>Risk Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for click in click_data %}
+                                <tr>
+                                    <td>
+                                        <div>{{ click.clicked_at.strftime('%m/%d/%Y') }}</div>
+                                        <small class="text-muted">{{ click.clicked_at.strftime('%I:%M %p') }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-warning rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                <i data-feather="mouse-pointer" style="width: 12px; height: 12px; color: white;"></i>
+                                            </div>
+                                            <div>
+                                                <strong>{{ click.name }}</strong>
+                                                <br><small class="text-muted">{{ click.email }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if click.department %}
+                                            <span class="badge bg-secondary">{{ click.department }}</span>
+                                        {% else %}
+                                            <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if click.role %}
+                                            <span class="badge bg-info">{{ click.role }}</span>
+                                        {% else %}
+                                            <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ click.campaign_name }}</td>
+                                    <td>
+                                        {% if click.time_to_click %}
+                                            <span class="text-{{ 'danger' if click.time_to_click < 60 else 'warning' if click.time_to_click < 300 else 'info' }}">
+                                                {{ click.time_to_click }}s
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">--</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="small">
+                                            <div><i data-feather="monitor" class="me-1" style="width:10px;"></i>{{ click.os or 'Unknown' }}</div>
+                                            <div><i data-feather="chrome" class="me-1" style="width:10px;"></i>{{ click.browser or 'Unknown' }}</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if click.viewed_education %}
+                                            <span class="badge bg-success">
+                                                <i data-feather="check-circle" style="width: 12px; height: 12px;"></i>
+                                                Completed
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-warning">
+                                                <i data-feather="clock" style="width: 12px; height: 12px;"></i>
+                                                Pending
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if click.role in ['manager', 'director', 'executive'] %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif click.role in ['developer', 'administrator'] %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% else %}
+                                            <span class="badge bg-info">Standard</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination would go here in a real implementation -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="small text-muted">
+                            Showing {{ click_data|length }} recent clicks
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary" disabled>
+                                <i data-feather="chevron-left" style="width: 14px; height: 14px;"></i>
+                                Previous
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" disabled>
+                                Next
+                                <i data-feather="chevron-right" style="width: 14px; height: 14px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i data-feather="activity" class="text-muted mb-3" style="width: 48px; height: 48px;"></i>
+                        <h5 class="text-muted">No Click Activity Yet</h5>
+                        <p class="text-muted">User clicks will appear here as campaigns are launched and links are accessed.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Training Insights Panel -->
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card border-info">
+            <div class="card-header bg-info text-dark">
+                <h6 class="mb-0"><i data-feather="zap" class="me-2"></i>Training Insights</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i data-feather="target" class="me-2 text-warning"></i>
+                        <strong>High-risk users:</strong> Focus additional training on users with multiple clicks
+                    </li>
+                    <li class="mb-2">
+                        <i data-feather="users" class="me-2 text-info"></i>
+                        <strong>Department trends:</strong> Some departments may need targeted training
+                    </li>
+                    <li class="mb-0">
+                        <i data-feather="trending-down" class="me-2 text-success"></i>
+                        <strong>Improvement:</strong> Track click rate reduction over time
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0"><i data-feather="shield-off" class="me-2"></i>Risk Assessment</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span>Overall Risk Level:</span>
+                        <strong class="text-warning">Moderate</strong>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span>High-Risk Roles:</span>
+                        <span>{{ campaigns|selectattr('total_clicked')|list|length }}</span>
+                    </div>
+                </div>
+                <div class="mb-0">
+                    <div class="d-flex justify-content-between">
+                        <span>Needs Follow-up:</span>
+                        <span class="text-danger">{{ click_data|rejectattr('viewed_education')|list|length }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card border-success">
+            <div class="card-header bg-success text-dark">
+                <h6 class="mb-0"><i data-feather="award" class="me-2"></i>Training Success</h6>
+            </div>
+            <div class="card-body">
+                {% set total_education_views = click_data|selectattr('viewed_education')|list|length %}
+                {% set total_clicks = click_data|length %}
+                {% if total_clicks > 0 %}
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span>Education Completion:</span>
+                            <strong>{{ ((total_education_views / total_clicks) * 100)|round(1) }}%</strong>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="mb-2">
+                    <div class="d-flex justify-content-between">
+                        <span>Users Trained:</span>
+                        <span>{{ total_education_views }}</span>
+                    </div>
+                </div>
+                <div class="mb-0">
+                    <small class="text-muted">Users are learning to identify threats!</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Results Modal -->
+<div class="modal fade" id="detailedResultsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i data-feather="bar-chart-2" class="me-2"></i>Detailed Campaign Analysis
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="detailedResultsContent">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Filter click activity by time period
+function filterClicks(period) {
+    // Update button states
+    document.querySelectorAll('#clickActivityTable + .card-footer .btn-group .btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // In a real implementation, this would filter the table data
+    console.log(`Filtering clicks for period: ${period}`);
+}
+
+// View detailed campaign results
+function viewDetailedResults(campaignId) {
+    const detailsContent = document.getElementById('detailedResultsContent');
+    detailsContent.innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading detailed analysis...</p>
+        </div>
+    `;
+    
+    // Show the modal
+    new bootstrap.Modal(document.getElementById('detailedResultsModal')).show();
+    
+    // Simulate loading detailed data
+    setTimeout(() => {
+        detailsContent.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Click Timeline</h6>
+                    <div class="alert alert-info">
+                        <i data-feather="clock" class="me-2"></i>
+                        Interactive timeline showing when users clicked the phishing links would be displayed here.
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6>User Breakdown</h6>
+                    <div class="alert alert-warning">
+                        <i data-feather="users" class="me-2"></i>
+                        Detailed user analysis by department, role, and individual performance would be shown here.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h6>Recommendations</h6>
+                    <div class="alert alert-success">
+                        <i data-feather="zap" class="me-2"></i>
+                        AI-powered recommendations for improving training effectiveness would be provided here.
+                    </div>
+                </div>
+            </div>
+        `;
+        feather.replace();
+    }, 1000);
+}
+
+// Refresh data
+function refreshData() {
+    window.location.reload();
+}
+
+// Auto-refresh every 5 minutes
+setTimeout(function() {
+    refreshData();
+}, 300000);
+</script>
+{% endblock %}

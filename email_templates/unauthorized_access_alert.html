@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unauthorized Access Detected</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            border: 1px solid #dddfe2;
+        }
+        .header {
+            background-color: #d93025;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+            line-height: 1.5;
+        }
+        .warning-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .alert-heading {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #d93025;
+        }
+        .details-table {
+            width: 100%;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        .details-table td {
+            padding: 8px 0;
+            border-bottom: 1px solid #eeeeee;
+        }
+        .details-table td:first-child {
+            font-weight: bold;
+            width: 120px;
+            color: #606770;
+        }
+        .action-link {
+            display: inline-block;
+            color: #1a73e8;
+            text-decoration: underline;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .footer {
+            background-color: #f0f2f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #606770;
+            border-top: 1px solid #dddfe2;
+        }
+        .urgent {
+            color: #d93025;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="warning-icon">⚠️</div>
+            <div style="font-size: 24px; font-weight: bold;">SECURITY ALERT</div>
+        </div>
+        
+        <div class="content">
+            <p>Dear {{USER_NAME}},</p>
+            
+            <p class="alert-heading">Your account was accessed from an unrecognized device.</p>
+            
+            <p>Our security systems have flagged a suspicious login attempt. To protect your data, we have placed a temporary security hold on your account.</p>
+            
+            <table class="details-table">
+                <tr>
+                    <td>Device:</td>
+                    <td>Chrome on Linux (Ubuntu)</td>
+                </tr>
+                <tr>
+                    <td>Location:</td>
+                    <td>Moscow, Russia (IP: 95.161.224.11)</td>
+                </tr>
+                <tr>
+                    <td>Time:</td>
+                    <td>Just now</td>
+                </tr>
+            </table>
+            
+            <p>If this was not you, <span class="urgent">immediate action is required</span> to prevent unauthorized data exfiltration. Failure to verify your identity within 1 hour will result in a permanent account suspension.</p>
+            
+            <p>Please click the link below to review this activity and secure your account:</p>
+            
+            <p style="text-align: center;">
+                <a href="{{TRACKING_URL}}" class="action-link">https://accounts.google.com/security/verify-identity-activity-check</a>
+            </p>
+            
+            <p style="font-size: 13px; color: #606770;">Note: For your protection, do not share your login credentials with anyone. Our security team will never ask for your password over email.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Global Security Operations Center<br>
+            Case ID: SEC-UA-99210-B</p>
+            <p>&copy; 2024 Corporate Security. Confidential. This email was sent to {{USER_NAME}}.</p>
+        </div>
+    </div>
+</body>
+</html>

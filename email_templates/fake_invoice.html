@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #INV-2024-8847 - Payment Due</title>
+    <style>
+        /* Fake invoice template with intentional red flags for training */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .invoice-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .invoice-header {
+            background-color: #2c5aa0;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .company-info {
+            flex: 1;
+        }
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .company-details {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .invoice-number {
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 30px;
+        }
+        .urgent-notice {
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .urgent-text {
+            color: #856404;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .invoice-details {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .invoice-details th,
+        .invoice-details td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .invoice-details th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        .total-row {
+            background-color: #e9ecef;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .payment-button {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .overdue-notice {
+            background-color: #f8d7da;
+            border: 1px solid #f1aeb5;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #666;
+        }
+        .red-flag {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .grammatical-error {
+            /* Intentional errors for training purposes */
+        }
+    </style>
+</head>
+<body>
+    <!-- This is a cybersecurity training email. If you received this, 
+         you are part of a phishing awareness training program. -->
+    
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="invoice-header">
+            <div class="company-info">
+                <div class="company-name">Global Business Solutions Inc.</div>
+                <div class="company-details">
+                    Professional Services & Consulting<br>
+                    📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7012191c1c191e1730171c1f12111c120503191e150303031f1c5e12190a">[email&#160;protected]</a> | 📞 1-800-GBS-BILL
+                </div>
+            </div>
+            <div class="invoice-number">
+                INVOICE<br>
+                #INV-2024-8847
+            </div>
+        </div>
+        
+        <!-- Urgent Notice -->
+        <div class="content">
+            <div class="urgent-notice">
+                <div class="urgent-text">⚠️ PAYMENT OVERDUE - IMMEDIATE ACTION REQUIRED ⚠️</div>
+                <div style="margin-top: 10px; font-size: 14px;">
+                    This invoice is now <span class="red-flag">37 days past due</span>. 
+                    Please remit payment immediately to avoid collection proceedings.
+                </div>
+            </div>
+            
+            <h2>Invoice for: {{USER_NAME}}</h2>
+            
+            <!-- Invoice Details Table -->
+            <table class="invoice-details">
+                <tr>
+                    <th>Invoice Date</th>
+                    <td>October 15, 2024</td>
+                    <th>Due Date</th>
+                    <td class="red-flag">November 1, 2024 (OVERDUE)</td>
+                </tr>
+                <tr>
+                    <th>Bill To</th>
+                    <td>{{USER_NAME}}<br>Department: Finance/Accounting</td>
+                    <th>Customer ID</th>
+                    <td>CUST-78945-{{USER_NAME|first}}</td>
+                </tr>
+                <tr>
+                    <th>Service Period</th>
+                    <td>September 1-30, 2024</td>
+                    <th>Payment Terms</th>
+                    <td>Net 15 Days</td>
+                </tr>
+            </table>
+            
+            <!-- Line Items -->
+            <h3>Services Provided</h3>
+            <table class="invoice-details">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Enterprise Software Consultation</td>
+                        <td>40 hours</td>
+                        <td>$125.00/hr</td>
+                        <td>$5,000.00</td>
+                    </tr>
+                    <tr>
+                        <td>System Integration Services</td>
+                        <td>1</td>
+                        <td>$2,850.00</td>
+                        <td>$2,850.00</td>
+                    </tr>
+                    <tr>
+                        <td>Data Migration & Setup</td>
+                        <td>1</td>
+                        <td>$1,200.00</td>
+                        <td>$1,200.00</td>
+                    </tr>
+                    <tr>
+                        <td>Emergency Weekend Support</td>
+                        <td>8 hours</td>
+                        <td>$200.00/hr</td>
+                        <td>$1,600.00</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="3" style="text-align: right;">TOTAL AMOUNT DUE:</td>
+                        <td>$10,650.00</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- Overdue Notice -->
+            <div class="overdue-notice">
+                <h4 style="margin-top: 0;">⚠️ OVERDUE PAYMENT NOTICE</h4>
+                <p class="grammatical-error">
+                    <strong>This invoice are now seriously overdue.</strong> 
+                    We have made several attempts to contact you regarding this outstanding balance. 
+                    Failure to remit payment within 48 hours will result in:
+                </p>
+                <ul>
+                    <li>Late fees of $250.00</li>
+                    <li>Interest charges at 18% annual rate</li>
+                    <li>Referral to collection agency</li>
+                    <li>Potential legal action for debt recovery</li>
+                </ul>
+                <p class="red-flag">
+                    <strong>FINAL NOTICE:</strong> This is your last opportunity to resolve this matter before collection proceedings begin.
+                </p>
+            </div>
+            
+            <h3>Payment Instructions</h3>
+            <p>To avoid additional fees and collection action, please process payment immediately using our secure online portal:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{TRACKING_URL}}" class="payment-button">
+                    💳 PAY INVOICE NOW - $10,650.00
+                </a>
+            </div>
+            
+            <div style="background-color: #d1ecf1; border: 1px solid #b3d7e6; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <h4 style="margin-top: 0; color: #0c5460;">Secure Payment Options Available:</h4>
+                <ul style="margin-bottom: 0;">
+                    <li>Credit Card (Visa, MasterCard, AmEx)</li>
+                    <li>Bank Transfer (ACH)</li>
+                    <li>Wire Transfer (for international payments)</li>
+                    <li>Online Check Payment</li>
+                </ul>
+            </div>
+            
+            <p style="font-size: 14px;" class="grammatical-error">
+                <strong>Important:</strong> If you believes this invoice has been sent in error, 
+                please contact our billing department immediately at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c5e55505055525b7c5b50535e5d505e494f5552594f4f4f5350125e5546">[email&#160;protected]</a></strong> 
+                or call <strong>1-800-GBS-BILL</strong>. 
+                However, we has verified all charges and believe them to be accurate.
+            </p>
+            
+            <p style="font-size: 14px; color: #666;">
+                <strong>Reference Number:</strong> GBS-{{USER_NAME|first}}{{USER_NAME|last}}-INV8847<br>
+                <strong>Account Manager:</strong> Jessica Thompson, Senior Billing Specialist<br>
+                <strong>Direct Line:</strong> 1-800-GBS-BILL ext. 2847
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div style="display: flex; justify-content: space-between;">
+                <div>
+                    <strong>Global Business Solutions Inc.</strong><br>
+                    4578 Business Center Drive<br>
+                    Suite 200<br>
+                    Austin, TX 78744<br>
+                </div>
+                <div style="text-align: right;">
+                    📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="96e5e3e6e6f9e4e2d6f1faf9f4f7faf4e3e5fff8f3e5e5e5f9fab8f4ffec">[email&#160;protected]</a><br>
+                    📞 Main: 1-800-GBS-MAIN<br>
+                    📞 Billing: 1-800-GBS-BILL<br>
+                    🌐 www.globalbusinesssol.biz
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 11px; color: #999;">
+                This invoice was generated automatically by our billing system. 
+                Please retain this document for your records. 
+                Payment terms are strictly enforced. 
+                All amounts are in USD.
+                
+                <br><br>
+                
+                <strong>Legal Notice:</strong> This communication may contain confidential and/or privileged information. 
+                If you are not the intended recipient, please notify the sender and delete this message.
+                
+                <br><br>
+                
+                © 2024 Global Business Solutions Inc. All rights reserved. 
+                Tax ID: 74-1234567 | Business License: TX-BL-2024-5567
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden educational disclaimer -->
+    <div style="display: none;">
+        PHISHING TRAINING EMAIL: This 

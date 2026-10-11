@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Cybersecurity Training{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i data-feather="shield" class="me-2"></i>Training Dashboard</h1>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('campaigns') }}" class="btn btn-primary">
+                    <i data-feather="plus" class="me-1"></i>New Campaign
+                </a>
+                <a href="{{ url_for('results', format='csv') }}" class="btn btn-outline-secondary">
+                    <i data-feather="download" class="me-1"></i>Export Data
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Metrics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i data-feather="users" class="text-primary" style="width: 24px; height: 24px;"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="small text-muted">Total Users</div>
+                        <div class="h4 mb-0">{{ total_users }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i data-feather="mail" class="text-info" style="width: 24px; height: 24px;"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="small text-muted">Total Campaigns</div>
+                        <div class="h4 mb-0">{{ total_campaigns }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i data-feather="activity" class="text-success" style="width: 24px; height: 24px;"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="small text-muted">Active Campaigns</div>
+                        <div class="h4 mb-0">{{ active_campaigns }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i data-feather="mouse-pointer" class="text-warning" style="width: 24px; height: 24px;"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <div class="small text-muted">Overall Click Rate</div>
+                        <div class="h4 mb-0">{{ overall_click_rate }}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Recent Campaigns -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i data-feather="mail" class="me-2"></i>Recent Campaigns</h5>
+                <a href="{{ url_for('campaigns') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_campaigns %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Campaign Name</th>
+                                    <th>Status</th>
+                                    <th>Sent</th>
+                                    <th>Clicked</th>
+                                    <th>Rate</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for campaign in recent_campaigns %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ campaign.name }}</strong>
+                                        {% if campaign.description %}
+                                            <br><small class="text-muted">{{ campaign.description[:50] }}{% if campaign.description|length > 50 %}...{% endif %}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if campaign.status == 'active' else 'primary' if campaign.status == 'completed' else 'secondary' }}">
+                                            {{ campaign.status.title() }}
+                                        </span>
+                                    </td>
+                                    <td>{{ campaign.total_sent }}</td>
+                                    <td>{{ campaign.total_clicked }}</td>
+                                    <td>{{ campaign.click_rate }}%</td>
+                                    <td>{{ campaign.created_at.strftime('%m/%d/%Y') }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i data-feather="mail" class="text-muted mb-3" style="width: 48px; height: 48px;"></i>
+                        <p class="text-muted">No campaigns created yet.</p>
+                        <a href="{{ url_for('campaigns') }}" class="btn btn-primary">Create Your First Campaign</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Click Activity -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i data-feather="activity" class="me-2"></i>Recent Activity</h5>
+                <a href="{{ url_for('results') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_clicks %}
+                    <div class="activity-feed">
+                        {% for click in recent_clicks %}
+                        <div class="activity-item mb-3 pb-3 {% if not loop.last %}border-bottom{% endif %}">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="badge bg-warning rounded-pill">
+                                        <i data-feather="mouse-pointer" style="width: 12px; height: 12px;"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <div class="small">
+                                        <strong>{{ click.user.name }}</strong> clicked a phishing link
+                                    </div>
+                                    <div class="text-muted small">
+                                        {{ click.clicked_at.strftime('%m/%d %I:%M %p') }}
+                                        {% if click.user.department %}
+                                            • {{ click.user.department }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-3">
+                        <i data-feather="activity" class="text-muted mb-2" style="width: 32px; height: 32px;"></i>
+                        <p class="text-muted small mb-0">No recent activity</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Security Tips Panel -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-info">
+            <div class="card-header bg-info text-dark">
+                <h6 class="mb-0"><i data-feather="info" class="me-2"></i>Educational Reminder</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6><i data-feather="shield" class="me-2 text-primary"></i>Purpose</h6>
+                        <p class="small mb-0">This platform simulates phishing attacks to help employees recognize and avoid real threats in their daily work.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i data-feather="eye" class="me-2 text-warning"></i>What to Look For</h6>
+                        <p class="small mb-0">Suspicious sender addresses, urgent language, unexpected attachments, and requests for sensitive information.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i data-feather="book" class="me-2 text-success"></i>Learning Goal</h6>
+                        <p class="small mb-0">Increase cybersecurity awareness and reduce the organization's vulnerability to real phishing attacks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto-refresh dashboard data every 30 seconds
+    setTimeout(function() {
+        window.location.reload();
+    }, 30000);
+    
+    // Initialize tooltips for better UX
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Security Verification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #0078d4;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .content {
+            padding: 40px 35px;
+            line-height: 1.7;
+        }
+        .notice-box {
+            background-color: #e8f4fd;
+            border-left: 4px solid #0078d4;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #0078d4;
+            color: white;
+            text-decoration: none;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-weight: 500;
+            margin: 25px 0;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #106ebe;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 25px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e9ecef;
+            margin: 25px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">IT Security Services</div>
+            <div style="font-size: 14px; opacity: 0.9;">Account Protection Department</div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <h2 style="color: #333; margin-bottom: 15px; font-weight: 600;">Account Verification Required</h2>
+            
+            <p>Hello {user_name},</p>
+            
+            <p>As part of our ongoing security measures, we need you to verify your account access. This is a routine security check to ensure your account remains protected.</p>
+            
+            <div class="notice-box">
+                <h4 style="margin: 0 0 10px 0; color: #0078d4;">Security Check Details</h4>
+                <p style="margin: 0; font-size: 14px;">
+                    <strong>Account:</strong> Your company account<br>
+                    <strong>Action Required:</strong> Identity verification<br>
+                    <strong>Time Frame:</strong> Within 48 hours
+                </p>
+            </div>
+            
+            <p>To complete this verification process, please click the button below to access our secure verification portal:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{tracking_url}" class="button">Complete Verification</a>
+            </div>
+            
+            <p style="font-size: 14px; color: #666;">This verification helps us maintain the highest security standards for all user accounts.</p>
+            
+            <div class="divider"></div>
+            
+            <p style="font-size: 13px; color: #888;">
+                <strong>Need assistance?</strong> Contact our IT Support team at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8efdfbfefee1fcfaceede1e3feefe0f7a0ede1e3">[email&#160;protected]</a> or call ext. 4567.
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>IT Security Services</strong><br>
+            Company Technology Department</p>
+            
+            <p style="margin: 15px 0 5px 0; font-size: 12px; color: #999;">
+                This message was sent from a

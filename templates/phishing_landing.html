@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Training - Phishing Simulation Detected</title>
+    
+    <!-- Bootstrap CSS with Replit dark theme -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <style>
+        .warning-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .security-icon {
+            font-size: 4rem;
+            color: #ff6b6b;
+        }
+        
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            <!-- Main Alert Section -->
+            <div class="col-lg-8 d-flex align-items-center justify-content-center">
+                <div class="text-center p-5">
+                    <div class="warning-animation mb-4">
+                        <i data-feather="shield-off" class="security-icon"></i>
+                    </div>
+                    
+                    <h1 class="display-4 text-warning mb-3">
+                        🚨 TRAINING ALERT 🚨
+                    </h1>
+                    
+                    <h2 class="h3 text-danger mb-4">
+                        You Just Clicked a Phishing Link!
+                    </h2>
+                    
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            <i data-feather="alert-circle" class="me-2"></i>
+                            {{ error }}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning border-warning">
+                            <h5 class="alert-heading">
+                                <i data-feather="info" class="me-2"></i>
+                                This Was a Training Exercise
+                            </h5>
+                            <p class="mb-0">
+                                {% if user %}
+                                    <strong>{{ user.name }}</strong>, you have just participated in a cybersecurity training simulation. 
+                                    In a real scenario, clicking this link could have compromised your account or infected your computer with malware.
+                                {% else %}
+                                    You have just participated in a cybersecurity training simulation. 
+                                    In a real scenario, clicking this link could have compromised your account or infected your computer with malware.
+                                {% endif %}
+                            </p>
+                        </div>
+                        
+                        <!-- What Happened Section -->
+                        <div class="card bg-dark border-warning mb-4">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0">
+                                    <i data-feather="eye" class="me-2"></i>
+                                    What Just Happened?
+                                </h5>
+                            </div>
+                            <div class="card-body text-start">
+                                <p>You received an email as part of our cybersecurity training program and clicked on a link within it. Here's what we recorded:</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i data-feather="mail" class="me-2 text-info"></i>
+                                        <strong>Training Email:</strong> 
+                                        {% if campaign %}
+                                            "{{ campaign.name }}"
+                                        {% else %}
+                                            Phishing simulation
+                                        {% endif %}
+                                    </li>
+                                    <li class="mb-2">
+                                        <i data-feather="clock" class="me-2 text-info"></i>
+                                        <strong>Time Clicked:</strong> Just now
+                                    </li>
+                                    <li class="mb-2">
+                                        <i data-feather="user" class="me-2 text-info"></i>
+                                        <strong>Your Response:</strong> Clicked the suspicious link
+                                    </li>
+                                    <li class="mb-0">
+                                        <i data-feather="shield" class="me-2 text-success"></i>
+                                        <strong>Actual Risk:</strong> None - this was completely safe training
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Learning Section -->
+                        <div class="card bg-dark border-info mb-4">
+                            <div class="card-header bg-info text-dark">
+                                <h5 class="mb-0">
+                                    <i data-feather="book-open" class="me-2"></i>
+                                    Learn From This Experience
+                                </h5>
+                            </div>
+                            <div class="card-body text-start">
+                                <p>Use this as a learning opportunity to improve your cybersecurity awareness:</p>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-danger">
+                                            <i data-feather="x-circle" class="me-2"></i>
+                                            Red Flags You Might Have Missed
+                                        </h6>
+                                        <ul class="small">
+                                            <li>Urgent or threatening language</li>
+                                            <li>Requests for immediate action</li>
+                                            <li>Suspicious sender email address</li>
+                                            <li>Generic greetings instead of your name</li>
+                                            <li>Poor grammar or spelling</li>
+                                            <li>Unexpected attachments or links</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-success">
+                                            <i data-feather="check-circle" class="me-2"></i>
+                                            What You Should Do Instead
+                                        </h6>
+                                        <ul class="small">
+                                            <li>Verify sender through other means</li>
+                                            <li>Hover over links to check destinations</li>
+                                            <li>Be skeptical of urgent requests</li>
+                                            <li>Report suspicious emails to IT</li>
+                                            <li>Never provide passwords via email</li>
+                                            <li>When in doubt, ask for help</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            {% if tracking_id %}
+                                <a href="{{ url_for('show_education', tracking_id=tracking_id) }}" 
+                                   class="btn btn-success btn-lg me-md-2">
+                                    <i data-feather="graduation-cap" class="me-2"></i>
+                                    Continue Learning
+                                </a>
+                            {% endif %}
+                            <button class="btn btn-outline-info btn-lg" onclick="shareExperience()">
+                                <i data-feather="share-2" class="me-2"></i>
+                                Share This Learning
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Quick Tips Sidebar -->
+            <div class="col-lg-4 bg-secondary">
+                <div class="p-4 h-100">
+                    <h4 class="mb-4">
+                        <i data-feather="shield" class="me-2 text-success"></i>
+                        Quick Security Tips
+                    </h4>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="step-number bg-primary text-white">1</div>
+                            <div>
+                                <h6 class="mb-1">Think Before You Click</h6>
+                                <p class="small mb-0">Always pause and consider whether an email or link seems legitimate before clicking.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="step-number bg-warning text-dark">2</div>
+                            <div>
+                                <h6 class="mb-1">Verify the Sender</h6>
+                                <p class="small mb-0">Check if the email address matches the claimed sender. When in doubt, contact them directly.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="step-number bg-success text-white">3</div>
+                            <div>
+                                <h6 class="mb-1">Hover Over Links</h6>
+                                <p class="small mb-0">Hover your mouse over links to see the actual destination before clicking.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start mb-3">
+                            <div class="step-number bg-danger text-white">4</div>
+                            <div>
+                                <h6 class="mb-1">Report Suspicious Emails</h6>
+                                <p class="small mb-0">Forward suspicious emails to your IT security team immediately.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="alert-heading">
+                            <i data-feather="help-circle" class="me-2"></i>
+                            Need Help?
+                        </h6>
+                        <p class="small mb-2">If you have questions about this training or cybersecurity in general:</p>
+                        <ul class="small mb-0">
+                            <li>Contact your IT security team</li>
+                            <li>Attend cybersecurity training sessions</li>
+                            <li>Review your organization's security policies</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="small text-muted">
+                            <i data-feather="lock" class="me-1"></i>
+                            This training helps protect our organization from real cyber threats.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Initialize Feather Icons -->
+    <script>
+        feather.replace();
+        
+        // Share experience function
+        function shareExperience() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Cybersecurity Training Experience',
+                    text: 'I just completed a phishing awareness training exercise. Learn to identify threats!',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const text = 'I just completed a phishing awareness training exercise. It\'s important to stay vigilant against cyber threats!';
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Training experience copied to clipboard!');
+                }).catch(() => {
+                    alert('Unable to share, but great job on completing the training!');
+                });
+            }
+        }
+        
+        // Add some visual feedback
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate the warning icon
+            const icon = document.querySelector('.security-icon');
+            if (icon) {
+                setTimeout(() => {
+                    icon.style.color = '#ffc107';
+                }, 1000);
+                setTimeout(() => {
+                    icon.style.color = '#ff6b6b';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

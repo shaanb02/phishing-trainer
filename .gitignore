@@ -1,0 +1,38 @@
+# Secrets / environment
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+wheels/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Database / instance data
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Backups / archives
+*.backup
+*.bak
+*.zip
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Replit
+.replit
+replit.nix
+.upm/

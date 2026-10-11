@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Security Alert</title>
+    <style>
+        /* Basic phishing email template styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .header {
+            background-color: #1a73e8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 30px;
+            line-height: 1.6;
+        }
+        .alert-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .alert-title {
+            color: #856404;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .urgent {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+        .small-text {
+            font-size: 11px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- This is a cybersecurity training email. If you received this, 
+         you are part of a phishing awareness training program. -->
+    
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">🛡️ Security Center</div>
+            <div style="font-size: 14px; margin-top: 5px;">Account Protection Services</div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <h2 style="color: #dc3545; margin-bottom: 10px;">⚠️ URGENT SECURITY ALERT</h2>
+            
+            <p>Dear {{USER_NAME}},</p>
+            
+            <div class="alert-box">
+                <div class="alert-title">Suspicious Activity Detected</div>
+                <p>We have detected unusual login attempts on your account from the following location:</p>
+                <ul>
+                    <li><strong>Location:</strong> Unknown Location (IP: 192.168.xxx.xxx)</li>
+                    <li><strong>Device:</strong> Unrecognized Device</li>
+                    <li><strong>Time:</strong> Today at 3:42 AM</li>
+                </ul>
+            </div>
+            
+            <p>To protect your account, we have temporarily <span class="urgent">suspended your access</span> until you can verify your identity.</p>
+            
+            <p><strong>Immediate Action Required:</strong></p>
+            <p>Please click the button below to verify your account and restore full access. <span class="urgent">You have 24 hours</span> to complete this verification, or your account will be permanently locked.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{TRACKING_URL}}" class="button">🔐 VERIFY ACCOUNT NOW</a>
+            </div>
+            
+            <p style="font-size: 14px; color: #666;">If you did not attempt to access your account, please verify immediately to secure your information.</p>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <p style="margin: 0; font-size: 13px; color: #666;">
+                    <strong>Why am I receiving this?</strong><br>
+                    This alert was triggered by our automated security systems to protect your account from unauthorized access.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Security Center Team</strong><br>
+            Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c3b0a6a0b6b1aab7ba83a0acaeb3a2adbaeeb0bab0b7a6aeb0eda0acae">[email&#160;protected]</a><br>
+            Phone: 1-800-SEC-HELP</p>
+            
+            <p class="small-text">
+                This is an automated security notification. Please do not reply to this email.<br>
+                For support, visit our Help Center or contact customer service.
+            </p>
+            
+            <p class="small-text">
+                © 2024 Security Center. All rights reserved.<br>
+                123 Security Blvd, Safety City, SC 12345
+            </p>
+        </div>
+    </div>
+    
+    <!-- Hidden educational disclaimer -->
+    <div style="display: none;">
+        TRAINING EMAIL: This is a simulated phishing attack for cybersecurity education.
+        If you clicked the link above, you would be taken to an educational page explaining the risks.
+        Red flags in this email include: urgent lan
