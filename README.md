@@ -1,4 +1,4 @@
-# Phishing Trainer
+# PhishAwareAi (Phishing Trainer)
 
 A self-hosted phishing **simulation and security-awareness training** platform built with Flask. It lets an administrator run simulated phishing campaigns against their own team, track who clicks, and automatically serve educational material to anyone who falls for a test, so people learn to recognize real attacks in a safe environment.
 
