@@ -1,14 +1,20 @@
 import json
 import os
 import logging
-from openai import OpenAI
 from models import EmailTemplate
+
+# OpenAI is an optional dependency. If the package isn't installed, the
+# platform still runs and falls back to the built-in templates below.
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
 
 # Initialize OpenAI client
 # the newest OpenAI model is "gpt-4o" which was released May 13, 2024.
 # do not change this unless explicitly requested by the user
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-openai_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
+openai_client = OpenAI(api_key=OPENAI_API_KEY) if (OpenAI and OPENAI_API_KEY) else None
 
 
 def generate_personalized_email(user_name,

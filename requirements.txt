@@ -12,7 +12,10 @@ sendgrid==6.11.0
 resend==0.8.0
 
 # Database
-SQLAlchemy==2.0.23
+SQLAlchemy>=2.0.30
+
+# Optional AI email personalization (works without it; see README)
+openai>=1.0.0
 
 # User agent parsing for click tracking
 user-agents==2.2.0
